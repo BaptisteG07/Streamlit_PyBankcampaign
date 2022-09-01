@@ -418,9 +418,23 @@ if page == 'Vue métier' :
         
         
         # Création de la liste des paramètres à renseigner dans le model
-        X = [age, balance, marital, housing, loan, job, education, contact, pdays, previous, poutcome, campaign]
+        X = [age, balance, campaign, pdays, previous, job_admin, job_blue_collar, job_entrepreneur, job_housemaid, job_management,
+             job_retired, job_self_employed, job_services, job_student, job_technician, job_unemployed, job_unknown, marital_divorced,
+             marital_married, marital_single, education_primary, education_secondary, education_tertiary, education_unknown, housing_no,
+             housing_yes, loan_no, loan_yes, contact_cellular, contact_telephone, contact_unknown, poutcome_failure, poutcome_other,
+             poutcome_success, poutcome_unknown]
+        
+        
+        # Redimensionnement de X pour pouvoir l'utiliser dans le modèle
+        X = np.array(X).reshape((1,-1))
+        
+        # Affichage de X
+        st.write(X)
+        
+         
         
         # Normalisation de X ???
+        
         
         
         #Chargement du modèle
@@ -443,5 +457,6 @@ if page == 'Vue métier' :
   #     'poutcome_failure', 'poutcome_other', 'poutcome_success',
   #     'poutcome_unknown'
 
+print(X)
 
 
