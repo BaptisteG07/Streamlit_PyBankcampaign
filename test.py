@@ -457,6 +457,6 @@ if page == 'Vue métier' :
   #     'poutcome_failure', 'poutcome_other', 'poutcome_success',
   #     'poutcome_unknown'
 
-print(X)
+
 
 
