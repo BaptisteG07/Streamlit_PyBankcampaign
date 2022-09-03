@@ -6,7 +6,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 import xgboost as xgb
-import shap
+# import shap
 
 
 from scipy.stats import chi2_contingency
@@ -35,6 +35,7 @@ sns.set_theme()
 
 # Importation du dataset
 
+# df = pd.read_csv((bank.csv'), na_values=['.'])
 df = pd.read_csv(('C:/Users/asus/Documents/Datascientest/Projet_file_rouge/bank.csv'), na_values=['.'])
 
 # Preprocessing
@@ -428,20 +429,24 @@ if page == 'Vue métier' :
         # Redimensionnement de X pour pouvoir l'utiliser dans le modèle
         X = np.array(X).reshape((1,-1))
         
-        # Affichage de X
+        # Affichage de X avant normalisation
+        st.write("X avant normalisation")
         st.write(X)
         
-         
-        
-        # Normalisation de X ???
-        
-        
+        # Normalisation de X
+        X = pd.DataFrame(scaler_0.transform(X)) 
+
+        # Affichage de X après normalisation
+        st.write("X après normalisation")
+        st.write(X)        
         
         #Chargement du modèle
         xgbcl = load('xgbcl.joblib')
         
+        # Réponse du modèle 
         y_application = xgbcl.predict(X)
         
+        st.write("### Faut il appeler le client ?")
         y_application
         
 # Liste des variables 
