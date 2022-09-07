@@ -228,6 +228,18 @@ if page == 'Modélisation' :
             st.write("Nous obtenons ici un modèle avec un f1_score de 0.63 ce qui est peu mais au vue de la pauvreté de notre dataframe c'est ce que nous obtenons de mieux.")
 
 
+
+
+
+
+
+
+
+
+
+
+
+
 if page == 'Vue métier' :
     
     
@@ -235,8 +247,8 @@ if page == 'Vue métier' :
     # Présentation de la vue métier avec les probabilités
     st.write('## Vue métier')
     st.write("#### Nous avons également voulu proposer une vue métier avec l'utilisation de predict_proba.")
-    st.write("Tout ceci dans le but d'avoir une vue concret de notre projet")
-    st.write("#### Déterminer un seuil à partir duquel le banquier sera susceptible d'appeler le client pour qu'il fasse un dépôt.")
+    st.write("#### Tout ceci dans le but d'avoir une vue concret de notre projet.")
+    st.write("#### Nous avons donc voulu déterminer un seuil à partir duquel le banquier sera susceptible d'appeler un client pour qu'il fasse un dépôt.")
     
     if st.checkbox('Afficher les données sur predict_proba'):
 
