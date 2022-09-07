@@ -72,7 +72,7 @@ y_pred_xgbcl = xgbcl.predict(X_test)
 ## Création de la sidebar
 
 st.sidebar.header('PyBankCampaign')
-pages_names = ['Présentation du projet', 'Exploration des données', 'DataVisualisation', 'Modélisation', 'Vue métier']
+pages_names = ['Présentation du projet', 'Exploration et visualisation des données', 'Modélisation', 'Vue métier']
 page = st.sidebar.radio("Menu",pages_names)
 
 ## Navigation entre les pages 
@@ -101,11 +101,11 @@ if page == 'Présentation du projet' :
     st.write(" Nous utiliserons des modèles de Machine Learning ainsi que l’interprétabilité de chacun pour illustrer nos analyses.")
 
     
-if page == 'Exploration des données' :
+if page == 'Exploration et visualisation des données' :
     
     # Insertion des titres
     
-    st.write('## Exploration des données')
+    st.write('## Exploration et visualisation des données')
     
     st.write('Comme dans tout projet de data science, la première étape que nous avons réalisée est une analyse rapide des données.')
     st.write("Ainsi nous avons pu nous approprier le jeu de données mis à notre disposition, émettre quelques hypothèses et y associer des graphiques." )        
@@ -196,30 +196,7 @@ if page == 'Exploration des données' :
         st.pyplot(fig6)
         
         
-        
-        
-        
-        
-        
-
-
-if page == 'DataVisualisation' :
-    
-    # Affichage de certaines figures 
-    
-    st.write('## DataVisualisation')
-    st.write("#### Nous avons ensuite réalisé quelques visualisations ")
-    
-
-
-
-
-
-
-
-
-
-    
+ 
 if page == 'Modélisation' :
     
     st.write('## Modélisation')
@@ -258,7 +235,7 @@ if page == 'Vue métier' :
     # Présentation de la vue métier avec les probabilités
     st.write('## Vue métier')
     st.write("#### Nous avons également voulu proposer une vue métier avec l'utilisation de predict_proba.")
-    st.write("#### Déterminer un seuil à partir duquel le banquier sera suceptible d'appeler le client pour qu'il fasse un dépôt.")
+    st.write("#### Déterminer un seuil à partir duquel le banquier sera susceptible d'appeler le client pour qu'il fasse un dépôt.")
     
     if st.checkbox('Afficher les données sur predict_proba'):
 
@@ -304,6 +281,11 @@ if page == 'Vue métier' :
     
         cm_prob_xgb
         
+
+        # f1 score XGBClassifier
+
+        st.write("f1 score XGBClassifier :",np.round(f1_score(y_test_01, y_preds_xbgc),decimals = 3))
+
         # f1 score XGBClassifier
       #  st.write("f1 score XGBClassifier :")
       #  f1_score_pred = f1_score(y_test_01, y_preds_xbgc)
