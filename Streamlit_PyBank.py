@@ -36,10 +36,42 @@ sns.set_theme()
 # Importation du dataset
 
 # df = pd.read_csv((bank.csv'), na_values=['.'])
-df = pd.read_csv(('C:/Users/asus/Documents/Datascientest/Projet_file_rouge/bank.csv'), na_values=['.'])
+df = pd.read_csv(('C:/Users/asus/Documents/Datascientest/Projet_file_rouge/bank.csv'))
 
 # Preprocessing
 
+
+
+# Supression des variables 'default','duration','day','month' de notre jeu de données
+df0 = df.drop(['default','duration','day','month'], axis = 1)
+
+
+# Séparation des features et des targets
+target_0 = df0['deposit']
+feats_0 = df0.drop('deposit', axis = 1)
+
+# Dichotomisation des features 
+feats_0 = pd.get_dummies(feats_0)
+
+# Séparation du jeu de données 
+X_train, X_test, y_train, y_test = train_test_split(feats_0,target_0, test_size = 0.2, random_state = 123)
+
+# Standardisation de X_train et X_test
+scaler_0 = StandardScaler()
+
+X_train = pd.DataFrame(scaler_0.fit_transform(X_train),columns = X_train.columns)
+
+X_test = pd.DataFrame(scaler_0.transform(X_test),columns = X_test.columns) 
+
+# Entrainement du modèle
+xgbcl = XGBClassifier()
+xgbcl.fit(X_train, y_train)
+
+# Prédiction
+y_pred_xgbcl = xgbcl.predict(X_test)
+
+
+'''
 df0 = df.drop(['default','duration','day','month'], axis = 1)
 
 # Séparation des features et des targets
@@ -61,11 +93,11 @@ X_test = pd.DataFrame(scaler_0.transform(X_test),columns = X_test.columns)
 xgbcl = XGBClassifier()
 xgbcl.fit(X_train, y_train)
 
-# Enregistrement du modèle
-dump(xgbcl, 'xgbcl.joblib')
-
 # Prédiction
 y_pred_xgbcl = xgbcl.predict(X_test)
+'''
+# Enregistrement du modèle
+dump(xgbcl, 'xgbcl.joblib')
 
 
 
@@ -252,15 +284,12 @@ if page == 'Vue métier' :
     
     if st.checkbox('Afficher les données sur predict_proba'):
 
-    
+
         # Fonction de Labelisation
         def to_labels(pos_probs, threshold):
             return (pos_probs >= threshold).astype('int')
         
-        # Remplacement de yes et no par 1 et 0
-        y_test_01 = y_test.replace(['yes','no'],[1,0])
-    
-        
+       
         # Prédiction des probabilités
         prob_reg_xbgc_train = xgbcl.predict_proba(X_train)
     
@@ -273,6 +302,9 @@ if page == 'Vue métier' :
         # Remplacer yes/no par 1/0 pour pouvoir etre exploitable
         y_train_prob_xgbc = y_train.replace(['yes','no'],[1,0])
         
+        # Remplacement de yes et no par 1 et 0
+        y_test_01 = y_test.replace(['yes','no'],[1,0])
+
         # Evaluation de chaque seuil
         scores = [f1_score(y_train_prob_xgbc, to_labels(probs_xgbc, t)) for t in thresholds]
         
@@ -299,6 +331,7 @@ if page == 'Vue métier' :
 
         st.write("f1 score XGBClassifier :",np.round(f1_score(y_test_01, y_preds_xbgc),decimals = 3))
 
+        
         # f1 score XGBClassifier
       #  st.write("f1 score XGBClassifier :")
       #  f1_score_pred = f1_score(y_test_01, y_preds_xbgc)
@@ -308,7 +341,8 @@ if page == 'Vue métier' :
         
         rapport_class_prob = classification_report(y_test_01, y_preds_xbgc)
         st.text('Model Report:\n ' + rapport_class_prob)
-    
+        
+        
     if st.checkbox("Application dirècte"):
         
         st.write("#### Choix des paramètres")
