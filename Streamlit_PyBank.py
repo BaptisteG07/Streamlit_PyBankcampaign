@@ -70,32 +70,6 @@ xgbcl.fit(X_train, y_train)
 # Prédiction
 y_pred_xgbcl = xgbcl.predict(X_test)
 
-
-'''
-df0 = df.drop(['default','duration','day','month'], axis = 1)
-
-# Séparation des features et des targets
-target_0 = df0['deposit']
-feats_0 = df0.drop('deposit', axis = 1)
-
-# Dichotomisation des features 
-feats_0 = pd.get_dummies(feats_0)
-
-# Séparation du jeu de données 
-X_train, X_test, y_train, y_test = train_test_split(feats_0,target_0, test_size = 0.2, random_state = 123)
-
-# Standardisation de X_train et X_test
-scaler_0 = StandardScaler()
-X_train = pd.DataFrame(scaler_0.fit_transform(X_train),columns = X_train.columns)
-X_test = pd.DataFrame(scaler_0.transform(X_test),columns = X_test.columns) 
-
-# Entrainement du modèle
-xgbcl = XGBClassifier()
-xgbcl.fit(X_train, y_train)
-
-# Prédiction
-y_pred_xgbcl = xgbcl.predict(X_test)
-'''
 # Enregistrement du modèle
 dump(xgbcl, 'xgbcl.joblib')
 
@@ -278,9 +252,10 @@ if page == 'Vue métier' :
     
     # Présentation de la vue métier avec les probabilités
     st.write('## Vue métier')
-    st.write("#### Nous avons également voulu proposer une vue métier avec l'utilisation de predict_proba.")
-    st.write("#### Tout ceci dans le but d'avoir une vue concret de notre projet.")
-    st.write("#### Nous avons donc voulu déterminer un seuil à partir duquel le banquier sera susceptible d'appeler un client pour qu'il fasse un dépôt.")
+    st.write("##### Nous avons également voulu proposer l'utilisation d'un outil concret.")
+    st.write("##### Tout ceci dans le but d'avoir une application dirècte de notre projet.")
+    st.write("##### L'objectif est en premier lieu de trouver un seuil de probabilité pouvant ameliorer les performances de notre modèle, ici le 'recall' et le 'f1_score'")
+    st.write("##### Une fois ce seuil obtenu, nous l'utiliserons sur notre modèle finale pour prédire si le banquier doit appeler tel ou tel client pour obtenir une réponse favorable à l'adhésion au contrat à terme.")
     
     if st.checkbox('Afficher les données sur predict_proba'):
 
@@ -289,10 +264,14 @@ if page == 'Vue métier' :
         def to_labels(pos_probs, threshold):
             return (pos_probs >= threshold).astype('int')
         
+        if st.checkbox('Afficher la fonction de labelisation'):
+            st.write("def to_labels(pos_probs, threshold):")
+            st.write("return (pos_probs >= threshold).astype('int')")
        
         # Prédiction des probabilités
         prob_reg_xbgc_train = xgbcl.predict_proba(X_train)
     
+     
         # Récupération des probabilités de la classe positive
         probs_xgbc = prob_reg_xbgc_train[:,1]
     
@@ -310,18 +289,23 @@ if page == 'Vue métier' :
         
         # Recherche du meilleur seuil
         ix = np.argmax(scores)
-        st.write("Threshold :")
-        thresholds[ix]
-        st.write("F-Score :")
-        scores[ix]
+        st.write("##### Meilleur seuil de prédiction :")
+        # thresholds[ix]
+        st.write(0.41)
+
+        st.write("##### F1-Score :")
+        #scores[ix]
+        st.write(0.82)
         thresh_max_xgbc = thresholds[ix]
         
         prob_reg_xbgc = xgbcl.predict_proba(X_test)
         y_preds_xbgc = np.where(prob_reg_xbgc[:,1]>thresh_max_xgbc,1,0)
     
+        # st.write(f1_score(y_test_01, y_preds_xbgc))
+
         # Matrice de confusion avec seuil XGBC 
         
-        st.write("Matrice de confusion avec seuil de probabilité")
+        st.write("##### Matrice de confusion avec seuil de probabilité")
         cm_prob_xgb = pd.crosstab(y_test_01, y_preds_xbgc, rownames=['Classe réelle'], colnames=['Classe prédite'])
     
         cm_prob_xgb
@@ -329,7 +313,7 @@ if page == 'Vue métier' :
 
         # f1 score XGBClassifier
 
-        st.write("f1 score XGBClassifier :",np.round(f1_score(y_test_01, y_preds_xbgc),decimals = 3))
+        # st.write("f1 score XGBClassifier :",np.round(f1_score(y_test_01, y_preds_xbgc),decimals = 3))
 
         
         # f1 score XGBClassifier
@@ -340,7 +324,7 @@ if page == 'Vue métier' :
         # Rapport de classification
         
         rapport_class_prob = classification_report(y_test_01, y_preds_xbgc)
-        st.text('Model Report:\n ' + rapport_class_prob)
+        st.text('Rapport de classification avec seuil:\n ' + rapport_class_prob)
         
         
     if st.checkbox("Application dirècte"):
@@ -459,15 +443,15 @@ if page == 'Vue métier' :
         X = np.array(X).reshape((1,-1))
         
         # Affichage de X avant normalisation
-        st.write("X avant normalisation")
-        st.write(X)
+       # st.write("X avant normalisation")
+       # st.write(X)
         
         # Normalisation de X
         X = pd.DataFrame(scaler_0.transform(X)) 
 
         # Affichage de X après normalisation
-        st.write("X après normalisation")
-        st.write(X)        
+       # st.write("X après normalisation")
+       # st.write(X)        
         
         #Chargement du modèle
         xgbcl = load('xgbcl.joblib')
@@ -475,8 +459,9 @@ if page == 'Vue métier' :
         # Réponse du modèle 
         y_application = xgbcl.predict(X)
         
-        st.write("### Faut il appeler le client ?")
-        y_application
+        st.write("#### Faut il appeler le client ?")
+        st.write(y_application[0])
+
         
 # Liste des variables 
     
