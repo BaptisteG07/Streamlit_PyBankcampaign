@@ -235,7 +235,7 @@ if page == 'Vue métier' :
     # Présentation de la vue métier avec les probabilités
     st.write('## Vue métier')
     st.write("#### Nous avons également voulu proposer une vue métier avec l'utilisation de predict_proba.")
-    st.write("Tout ceci dans le but d'avoir une vue concret de notre projet")
+    st.write("Tout ceci dans le but d'avoir une vue concrète de notre projet")
     st.write("#### Déterminer un seuil à partir duquel le banquier sera susceptible d'appeler le client pour qu'il fasse un dépôt.")
     
     if st.checkbox('Afficher les données sur predict_proba'):
