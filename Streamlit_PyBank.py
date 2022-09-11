@@ -234,9 +234,10 @@ if page == 'Vue métier' :
     
     # Présentation de la vue métier avec les probabilités
     st.write('## Vue métier')
-    st.write("#### Nous avons également voulu proposer une vue métier avec l'utilisation de predict_proba.")
-    st.write("Tout ceci dans le but d'avoir une vue concrète de notre projet")
-    st.write("#### Déterminer un seuil à partir duquel le banquier sera susceptible d'appeler le client pour qu'il fasse un dépôt.")
+    st.write("##### Nous avons également voulu proposer l'utilisation d'un outil concret.")
+    st.write("##### Tout ceci dans le but d'avoir une application dirècte de notre projet.")
+    st.write("##### L'objectif est en premier lieu de trouver un seuil de probabilité pouvant ameliorer les performances de notre modèle, ici le 'recall' et le 'f1_score'")
+    st.write("##### Une fois ce seuil obtenu, nous l'utiliserons sur notre modèle finale pour prédire si le banquier doit appeler tel ou tel client pour obtenir une réponse favorable à l'adhésion au contrat à terme.")
     
     if st.checkbox('Afficher les données sur predict_proba'):
 
