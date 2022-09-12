@@ -67,11 +67,11 @@ X_test = pd.DataFrame(scaler_0.transform(X_test),columns = X_test.columns)
 xgbcl = XGBClassifier()
 xgbcl.fit(X_train, y_train)
 
-# Prédiction
-y_pred_xgbcl = xgbcl.predict(X_test)
-
 # Enregistrement du modèle
 dump(xgbcl, 'xgbcl.joblib')
+
+# Prédiction
+y_pred_xgbcl = xgbcl.predict(X_test)
 
 
 
@@ -325,7 +325,7 @@ if page == 'Vue métier' :
         
         rapport_class_prob = classification_report(y_test_01, y_preds_xbgc)
         st.text('Rapport de classification avec seuil:\n ' + rapport_class_prob)
-        
+
         
     if st.checkbox("Application dirècte"):
         
