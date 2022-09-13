@@ -100,18 +100,6 @@ if page == 'Présentation du projet' :
         st.write('')
     
     
-###############################################
-    # Insertion des titres
-    
-    #st.write("# PyBankCampaign")
-    #st.write("<h3 style = 'color : blue';> Présentation du projet </h3>", unsafe_allow_html = True)
-  
-    
-    # Mise en place de l'image 
-
-    #st.image('Image_streamlit_2.jpg')
-################################################    
-
     st.write(" L’analyse des données marketing est une problématique très classique en sciences des données appliquées dans les entreprises de service.")
     st.write(' Nous disposons d’une base de données, contenant des informations personnelles sur des clients d’une banque qui ont été “télé-marketés”, pour souscrire à un produit que l’on appelle "dépôt à terme".')
     st.write(" Le principe est le suivant, lorsqu’un client souscrit à ce produit, il place une quantité d’argent dans un compte spécifique et ne pourra pas retirer ces fonds avant l’expiration du terme. En échange, le client reçoit des intérêts de la part de la banque à la fin du contrat.")
@@ -121,18 +109,6 @@ if page == 'Présentation du projet' :
     st.write(" L’objectif de ce projet sera donc de déterminer si un client va adhérer au produit « dépôt à terme », en fonction des résultats obtenus par rapport à la campagne précédente.")
     st.write(" Nous utiliserons des modèles de Machine Learning ainsi que l’interprétabilité de chacun pour illustrer nos analyses.")
 
-################################################
-    # Introduction
-    
-    #st.write(" L’analyse des données marketing est une problématique très classique en sciences des données appliquées dans les entreprises de service.")
-    #st.write(' Nous disposons d’une base de données, contenant des informations personnelles sur des clients d’une banque qui ont été “télé-marketés”, pour souscrire à un produit que l’on appelle "dépôt à terme".')
-    #st.write(" Le principe est le suivant, lorsqu’un client souscrit à ce produit, il place une quantité d’argent dans un compte spécifique et ne pourra pas retirer ces fonds avant l’expiration du terme. En échange, le client reçoit des intérêts de la part de la banque à la fin du contrat.")
-    
-    #st.write("<h2 style = 'color : red';> Objectif </h2>", unsafe_allow_html = True)
-    
-    #st.write(" L’objectif de ce projet sera donc de déterminer si un client va adhérer au produit « dépôt à terme », en fonction des résultats obtenus par rapport à la campagne précédente.")
-    #st.write(" Nous utiliserons des modèles de Machine Learning ainsi que l’interprétabilité de chacun pour illustrer nos analyses.")
-################################################
     
 if page == 'Exploration et visualisation des données' :
     
