@@ -41,7 +41,6 @@ df = pd.read_csv(('C:/Users/asus/Documents/Datascientest/Projet_file_rouge/bank.
 # Preprocessing
 
 
-
 # Supression des variables 'default','duration','day','month' de notre jeu de données
 df0 = df.drop(['default','duration','day','month'], axis = 1)
 
@@ -84,28 +83,56 @@ page = st.sidebar.radio("Menu",pages_names)
 ## Navigation entre les pages 
 
 if page == 'Présentation du projet' :
-    
+
     # Insertion des titres
     
-    st.write("# PyBankCampaign")
+    st.markdown("<h1 style='text-align: center;'> Projet PyBankCampaign</h1>", unsafe_allow_html=True)
     st.write("<h3 style = 'color : blue';> Présentation du projet </h3>", unsafe_allow_html = True)
   
     
     # Mise en place de l'image 
+    col1, col2, col3=st.columns([1,3,1])
+    with col1:
+        st.write('')
+    with col2:
+        st.image('image_streamlit_2.jpg', width=400)
+    with col3:
+        st.write('')
+    
+    
+###############################################
+    # Insertion des titres
+    
+    #st.write("# PyBankCampaign")
+    #st.write("<h3 style = 'color : blue';> Présentation du projet </h3>", unsafe_allow_html = True)
+  
+    
+    # Mise en place de l'image 
 
-    st.image('Image_streamlit_2.jpg')
-    
-    # Introduction
-    
+    #st.image('Image_streamlit_2.jpg')
+################################################    
+
     st.write(" L’analyse des données marketing est une problématique très classique en sciences des données appliquées dans les entreprises de service.")
     st.write(' Nous disposons d’une base de données, contenant des informations personnelles sur des clients d’une banque qui ont été “télé-marketés”, pour souscrire à un produit que l’on appelle "dépôt à terme".')
     st.write(" Le principe est le suivant, lorsqu’un client souscrit à ce produit, il place une quantité d’argent dans un compte spécifique et ne pourra pas retirer ces fonds avant l’expiration du terme. En échange, le client reçoit des intérêts de la part de la banque à la fin du contrat.")
     
-    st.write("<h2 style = 'color : red';> Objectif </h2>", unsafe_allow_html = True)
+    st.write("<h2 style = 'text-align: center; color : red';> Objectif </h2>", unsafe_allow_html = True)
     
     st.write(" L’objectif de ce projet sera donc de déterminer si un client va adhérer au produit « dépôt à terme », en fonction des résultats obtenus par rapport à la campagne précédente.")
     st.write(" Nous utiliserons des modèles de Machine Learning ainsi que l’interprétabilité de chacun pour illustrer nos analyses.")
 
+################################################
+    # Introduction
+    
+    #st.write(" L’analyse des données marketing est une problématique très classique en sciences des données appliquées dans les entreprises de service.")
+    #st.write(' Nous disposons d’une base de données, contenant des informations personnelles sur des clients d’une banque qui ont été “télé-marketés”, pour souscrire à un produit que l’on appelle "dépôt à terme".')
+    #st.write(" Le principe est le suivant, lorsqu’un client souscrit à ce produit, il place une quantité d’argent dans un compte spécifique et ne pourra pas retirer ces fonds avant l’expiration du terme. En échange, le client reçoit des intérêts de la part de la banque à la fin du contrat.")
+    
+    #st.write("<h2 style = 'color : red';> Objectif </h2>", unsafe_allow_html = True)
+    
+    #st.write(" L’objectif de ce projet sera donc de déterminer si un client va adhérer au produit « dépôt à terme », en fonction des résultats obtenus par rapport à la campagne précédente.")
+    #st.write(" Nous utiliserons des modèles de Machine Learning ainsi que l’interprétabilité de chacun pour illustrer nos analyses.")
+################################################
     
 if page == 'Exploration et visualisation des données' :
     
@@ -115,12 +142,14 @@ if page == 'Exploration et visualisation des données' :
     
     st.write('Comme dans tout projet de data science, la première étape que nous avons réalisée est une analyse rapide des données.')
     st.write("Ainsi nous avons pu nous approprier le jeu de données mis à notre disposition, émettre quelques hypothèses et y associer des graphiques." )        
+    st.write("Notre jeu est constitué des données de 11 162 Clients reparties en 17 variables ")    
 
     # Affichage des 2 datasets avec checkbox
 
     st.write("### Dataset")    
 
     if st.checkbox('Afficher les données'):
+        st.image('variables.png')
         
         liste_datasets = ['Dataset brut', 'Dataset principal']
         dataset = st.radio('Présentation des deux datasets',liste_datasets)
