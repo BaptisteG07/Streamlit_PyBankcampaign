@@ -87,7 +87,7 @@ if page == 'Présentation du projet' :
     # Insertion des titres
     
     st.markdown("<h1 style='text-align: center;'> Projet PyBankCampaign</h1>", unsafe_allow_html=True)
-    st.write("<h3 style = 'color : blue';> Présentation du projet </h3>", unsafe_allow_html = True)
+    st.write("<h3 style = 'color : skyblue';> Présentation du projet </h3>", unsafe_allow_html = True)
   
     
     # Mise en place de l'image 
@@ -105,7 +105,7 @@ if page == 'Présentation du projet' :
     st.write(' Nous disposons d’une base de données, contenant des informations personnelles sur des clients d’une banque qui ont été “télé-marketés”, pour souscrire à un produit que l’on appelle "dépôt à terme".')
     st.write(" Le principe est le suivant, lorsqu’un client souscrit à ce produit, il place une quantité d’argent dans un compte spécifique et ne pourra pas retirer ces fonds avant l’expiration du terme. En échange, le client reçoit des intérêts de la part de la banque à la fin du contrat.")
     
-    st.write("<h2 style = 'color : blue';> Objectif </h2>", unsafe_allow_html = True)
+    st.write("<h3 style = 'color : skyblue';> Objectif </h3>", unsafe_allow_html = True)
     
     st.write(" L’objectif de ce projet sera donc de déterminer si un client va adhérer au produit « dépôt à terme », en fonction des résultats obtenus par rapport à la campagne précédente.")
     st.write(" Nous utiliserons des modèles de Machine Learning ainsi que l’interprétabilité de chacun pour illustrer nos analyses.")
@@ -137,7 +137,7 @@ if page == 'Exploration et visualisation des données' :
 
     # Affichage des 2 datasets avec checkbox
 
-    st.write("### Dataset")    
+    st.markdown("<h3 style='color : skyblue'> Dataset</h3>", unsafe_allow_html=True)
 
     if st.checkbox('Afficher les données'):
         st.image('variables.png')
@@ -155,8 +155,7 @@ if page == 'Exploration et visualisation des données' :
             df0 = df.drop(['default','duration','day','month'], axis = 1)
             st.dataframe(df0)
             
-    st.write('### Hypothèses')
-    
+    st.markdown("<h3 style='color : skyblue'> Hypothèses</h3>", unsafe_allow_html=True)
         
     # Menu déroulent pour choisir les hypothèses / affichage de l'hypothèse choisi et du graphique
 
@@ -239,7 +238,7 @@ if page == 'Exploration et visualisation des données' :
  
 if page == 'Modélisation' :
     
-    st.markdown("<h1 style='text-align: center;'> Modélisation</h1>", unsafe_allow_html=True)
+    st.markdown("<h1 style='text-align: center;color : orange'> Modélisation</h1>", unsafe_allow_html=True)
 
     # st.write('## Modélisation')
     st.write("##### Nous utiliserons le modèle XGBclassifier car c'est celui avec lequel nous obtenons les meilleurs résultats sur le f1_score et le recall. ")
@@ -287,7 +286,7 @@ if page == 'Vue métier' :
     
     
     # Présentation de la vue métier avec les probabilités
-    st.write('## Vue métier')
+    st.markdown("<h1 style='text-align: center;color : orange'> Vue métier</h1>", unsafe_allow_html=True)
     st.write("##### Nous avons également voulu proposer l'utilisation d'un outil concret.")
     st.write("##### Tout ceci dans le but d'avoir une application dirècte de notre projet.")
     st.write("##### L'objectif est en premier lieu de trouver un seuil de probabilité pouvant ameliorer les performances de notre modèle, ici le 'recall' et le 'f1_score'")
@@ -325,11 +324,12 @@ if page == 'Vue métier' :
         
         # Recherche du meilleur seuil
         ix = np.argmax(scores)
-        st.write("##### Meilleur seuil de prédiction :")
+        st.markdown("<h4/> Meilleur seuil de prédiction</h4>", unsafe_allow_html=True)
         # thresholds[ix]
         st.write(0.41)
 
-        st.write("##### F1-Score :")
+        # F1_score
+        st.markdown("<h4/> F1-Score</h4>", unsafe_allow_html=True)
         #scores[ix]
         st.write(0.82)
         thresh_max_xgbc = thresholds[ix]
@@ -340,10 +340,8 @@ if page == 'Vue métier' :
         # st.write(f1_score(y_test_01, y_preds_xbgc))
 
         # Matrice de confusion avec seuil XGBC 
-        
-        st.write("##### Matrice de confusion avec seuil de probabilité")
+        st.markdown("<h4/> Matrice de confusion avec seuil de probabilité</h4>", unsafe_allow_html=True)
         cm_prob_xgb = pd.crosstab(y_test_01, y_preds_xbgc, rownames=['Classe réelle'], colnames=['Classe prédite'])
-    
         cm_prob_xgb
         
 
@@ -360,12 +358,13 @@ if page == 'Vue métier' :
         # Rapport de classification
         
         rapport_class_prob = classification_report(y_test_01, y_preds_xbgc)
-        st.text('Rapport de classification avec seuil:\n ' + rapport_class_prob)
+        st.markdown("<h4/> Rapport de classification avec seuil</h4>", unsafe_allow_html=True)
+        st.text(rapport_class_prob)
 
         
     if st.checkbox("Application dirècte"):
-        
-        st.write("#### Choix des paramètres")
+
+        st.markdown("<h4/> Choix des paramètres</h4>", unsafe_allow_html=True)
         
         age = st.slider(label = "Choix de l'âge", min_value = 18, max_value = 95,step = 1)
         
@@ -494,8 +493,8 @@ if page == 'Vue métier' :
         
         # Réponse du modèle 
         y_application = xgbcl.predict(X)
-        
-        st.write("#### Faut il appeler le client ?")
+
+        st.markdown("<h4/> Faut il appeler le client ?</h4>", unsafe_allow_html=True)
         st.write(y_application[0])
 
         
