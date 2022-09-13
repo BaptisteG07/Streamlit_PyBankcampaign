@@ -105,17 +105,31 @@ if page == 'Présentation du projet' :
     st.write(' Nous disposons d’une base de données, contenant des informations personnelles sur des clients d’une banque qui ont été “télé-marketés”, pour souscrire à un produit que l’on appelle "dépôt à terme".')
     st.write(" Le principe est le suivant, lorsqu’un client souscrit à ce produit, il place une quantité d’argent dans un compte spécifique et ne pourra pas retirer ces fonds avant l’expiration du terme. En échange, le client reçoit des intérêts de la part de la banque à la fin du contrat.")
     
-    st.write("<h2 style = 'text-align: center; color : red';> Objectif </h2>", unsafe_allow_html = True)
+    st.write("<h2 style = 'color : blue';> Objectif </h2>", unsafe_allow_html = True)
     
     st.write(" L’objectif de ce projet sera donc de déterminer si un client va adhérer au produit « dépôt à terme », en fonction des résultats obtenus par rapport à la campagne précédente.")
     st.write(" Nous utiliserons des modèles de Machine Learning ainsi que l’interprétabilité de chacun pour illustrer nos analyses.")
 
-    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 if page == 'Exploration et visualisation des données' :
     
     # Insertion des titres
-    
-    st.write('## Exploration et visualisation des données')
+    st.markdown("<h1 style='text-align: center; color : orange'> Exploration et visualisation des données</h1>", unsafe_allow_html=True)
+    # st.write('## Exploration et visualisation des données')
     
     st.write('Comme dans tout projet de data science, la première étape que nous avons réalisée est une analyse rapide des données.')
     st.write("Ainsi nous avons pu nous approprier le jeu de données mis à notre disposition, émettre quelques hypothèses et y associer des graphiques." )        
@@ -207,11 +221,27 @@ if page == 'Exploration et visualisation des données' :
         sns.countplot(df.poutcome, hue = df.deposit)
         st.pyplot(fig6)
         
-        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
  
 if page == 'Modélisation' :
     
-    st.write('## Modélisation')
+    st.markdown("<h1 style='text-align: center;'> Modélisation</h1>", unsafe_allow_html=True)
+
+    # st.write('## Modélisation')
     st.write("##### Nous utiliserons le modèle XGBclassifier car c'est celui avec lequel nous obtenons les meilleurs résultats sur le f1_score et le recall. ")
     
     
@@ -469,19 +499,3 @@ if page == 'Vue métier' :
         st.write(y_application[0])
 
         
-# Liste des variables 
-    
-#       'age', 'balance', 'campaign', 'pdays', 'previous', 'job_admin.',
- #      'job_blue-collar', 'job_entrepreneur', 'job_housemaid',
- #      'job_management', 'job_retired', 'job_self-employed', 'job_services',
- #      'job_student', 'job_technician', 'job_unemployed', 'job_unknown',
-  #     'marital_divorced', 'marital_married', 'marital_single',
-  #     'education_primary', 'education_secondary', 'education_tertiary',
-  #     'education_unknown', 'housing_no', 'housing_yes', 'loan_no', 'loan_yes',
-  #     'contact_cellular', 'contact_telephone', 'contact_unknown',
-  #     'poutcome_failure', 'poutcome_other', 'poutcome_success',
-  #     'poutcome_unknown'
-
-
-
-
