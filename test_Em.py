@@ -1,14 +1,11 @@
 # Importation des librairies
-
 import streamlit as st
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 import xgboost as xgb
-#import shap
-
-
+# import shap
 from scipy.stats import chi2_contingency
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
@@ -29,64 +26,51 @@ from PIL import Image
 from sklearn.metrics import plot_confusion_matrix
 from sklearn.metrics import confusion_matrix
 from joblib import dump, load
-
 sns.set_theme()
-
-
 # Importation du dataset
-
-df = pd.read_csv(('bank.csv'), na_values=['.'])
-
+# df = pd.read_csv((bank.csv'), na_values=['.'])
+df = pd.read_csv(('C:/Users/asus/Documents/Datascientest/Projet_file_rouge/bank.csv'), na_values=['.'])
 # Preprocessing
-
 df0 = df.drop(['default','duration','day','month'], axis = 1)
-
 # Séparation des features et des targets
 target_0 = df0['deposit']
 feats_0 = df0.drop('deposit', axis = 1)
-
 # Dichotomisation des features 
 feats_0 = pd.get_dummies(feats_0)
-
 # Séparation du jeu de données 
 X_train, X_test, y_train, y_test = train_test_split(feats_0,target_0, test_size = 0.2, random_state = 123)
-
 # Standardisation de X_train et X_test
 scaler_0 = StandardScaler()
 X_train = pd.DataFrame(scaler_0.fit_transform(X_train),columns = X_train.columns)
 X_test = pd.DataFrame(scaler_0.transform(X_test),columns = X_test.columns) 
-
 # Entrainement du modèle
 xgbcl = XGBClassifier()
 xgbcl.fit(X_train, y_train)
-
 # Enregistrement du modèle
 dump(xgbcl, 'xgbcl.joblib')
-
 # Prédiction
 y_pred_xgbcl = xgbcl.predict(X_test)
-
-
-
 ## Création de la sidebar
-
 st.sidebar.header('PyBankCampaign')
-pages_names = ['Présentation du projet', 'Exploration des données', 'DataVisualisation', 'Modélisation', 'Vue métier']
+pages_names = ['Présentation du projet', 'Exploration et visualisation des données', 'Modélisation', 'Vue métier']
 page = st.sidebar.radio("Menu",pages_names)
-
 ## Navigation entre les pages 
-
 if page == 'Présentation du projet' :
     
     # Insertion des titres
     
-    st.write("# PyBankCampaign")
+    st.markdown("<h1 style='text-align: center;'> Projet PyBankCampaign</h1>", unsafe_allow_html=True)
     st.write("<h3 style = 'color : blue';> Présentation du projet </h3>", unsafe_allow_html = True)
   
     
     # Mise en place de l'image 
-
-    st.image('Image_streamlit_2.jpg')
+    col1, col2, col3=st.columns([1,3,1])
+    with col1:
+        st.write('')
+    with col2:
+        st.image('image_streamlit_2.jpg', width=400)
+    with col3:
+        st.write('')
     
     # Introduction
     
@@ -94,25 +78,29 @@ if page == 'Présentation du projet' :
     st.write(' Nous disposons d’une base de données, contenant des informations personnelles sur des clients d’une banque qui ont été “télé-marketés”, pour souscrire à un produit que l’on appelle "dépôt à terme".')
     st.write(" Le principe est le suivant, lorsqu’un client souscrit à ce produit, il place une quantité d’argent dans un compte spécifique et ne pourra pas retirer ces fonds avant l’expiration du terme. En échange, le client reçoit des intérêts de la part de la banque à la fin du contrat.")
     
-    st.write("<h2 style = 'color : red';> Objectif </h2>", unsafe_allow_html = True)
+    st.write("<h2 style = 'text-align: center; color : red';> Objectif </h2>", unsafe_allow_html = True)
     
     st.write(" L’objectif de ce projet sera donc de déterminer si un client va adhérer au produit « dépôt à terme », en fonction des résultats obtenus par rapport à la campagne précédente.")
     st.write(" Nous utiliserons des modèles de Machine Learning ainsi que l’interprétabilité de chacun pour illustrer nos analyses.")
-
     
-if page == 'Exploration des données' :
+if page == 'Exploration et visualisation des données' :
     
     # Insertion des titres
     
-    st.write('## Exploration des données')
+    st.write('## Exploration et visualisation des données')
     
     st.write('Comme dans tout projet de data science, la première étape que nous avons réalisée est une analyse rapide des données.')
-    st.write("Ainsi nous avons pu nous approprier le jeu de données mis à notre disposition, émettre quelques hypothèses et y associer des graphiques." )        
+    st.write("Ainsi nous avons pu nous approprier le jeu de données mis à notre disposition, émettre quelques hypothèses et y associer des graphiques." ) 
+    st.write("Notre jeu est constitué des données de 11 162 Clients reparties en 17 variables ")    
 
     # Affichage des 2 datasets avec checkbox
 
-    st.write("### Dataset")    
+    st.write("### Dataset")   
 
+
+    if st.checkbox ('Présentation des variables'):
+        st.image('variables.png')
+         
     if st.checkbox('Afficher les données'):
         
         liste_datasets = ['Dataset brut', 'Dataset principal']
@@ -132,7 +120,6 @@ if page == 'Exploration des données' :
     
         
     # Menu déroulent pour choisir les hypothèses / affichage de l'hypothèse choisi et du graphique
-
     hypothèses = st.selectbox('Selectionner une hypothèse',('Hypothèse_1', 'Hypothèse_2', 'Hypothèse_3','Hypothèse_4','Hypothèse_5','Hypothèse_6'))
     
     if hypothèses == 'Hypothèse_1':
@@ -142,8 +129,6 @@ if page == 'Exploration des données' :
         fig1 = plt.figure()
         sns.countplot(df.loan, hue = df.deposit)
         st.pyplot(fig1)
-
-
     if hypothèses == 'Hypothèse_2':
         st.write("### Être marié favorise-t-il le dépôt ?")
         
@@ -151,7 +136,6 @@ if page == 'Exploration des données' :
         fig2 = plt.figure()
         sns.countplot(x = df.marital, hue = df.deposit)
         st.pyplot(fig2)
-
     
     if hypothèses == 'Hypothèse_3':
         st.write("### Ne pas avoir un défaut de crédit favorise-t-il un dépôt à terme ?")
@@ -160,8 +144,6 @@ if page == 'Exploration des données' :
         fig3 = plt.figure()
         sns.countplot(df.default, hue=df.deposit)
         st.pyplot(fig3)
-
-
     if hypothèses == 'Hypothèse_4':
         st.write("### A-t-on moins de chances de faire un dépôt quand on est étudiant et plus de chance d'en faire un en étant retraité ?")
         
@@ -174,8 +156,6 @@ if page == 'Exploration des données' :
         fig4_2 = plt.figure()
         sns.countplot(df.job=='retired', hue=df.deposit)
         st.pyplot(fig4_2)        
-
-
     if hypothèses == 'Hypothèse_5':
         st.write("### Le solde du compte peut-il influencer le choix de faire un dépôt ?")
         
@@ -184,20 +164,15 @@ if page == 'Exploration des données' :
         fig5 = plt.figure()
         sns.countplot(y = df.cut_balance, hue = df.deposit)
         st.pyplot(fig5)
-
-
     if hypothèses == 'Hypothèse_6':
         st.write("### Comment les anciennes campagnes influencent-elles les dépôts ?")
-
         st.write('##### Client ayant souscrit au produit à la campagne précédente en fontion de deposit')
         fig6 = plt.figure()
         sns.countplot(df.poutcome, hue = df.deposit)
         st.pyplot(fig6)
         
-
-
-
-    
+        
+ 
 if page == 'Modélisation' :
     
     st.write('## Modélisation')
@@ -227,8 +202,6 @@ if page == 'Modélisation' :
         if info == 'Rapport de classification':
             st.text('Model Report:\n ' + rapport_class)
             st.write("Nous obtenons ici un modèle avec un f1_score de 0.63 ce qui est peu mais au vue de la pauvreté de notre dataframe c'est ce que nous obtenons de mieux.")
-
-
 if page == 'Vue métier' :
     
     
@@ -236,10 +209,10 @@ if page == 'Vue métier' :
     # Présentation de la vue métier avec les probabilités
     st.write('## Vue métier')
     st.write("#### Nous avons également voulu proposer une vue métier avec l'utilisation de predict_proba.")
-    st.write("#### Déterminer un seuil à partir duquel le banquier sera suceptible d'appeler le client pour qu'il fasse un dépôt.")
-    
-    if st.checkbox('Afficher les données sur predict_proba'):
+    st.write("Tout ceci dans le but d'avoir une vue concrète de notre projet")
+    st.write("#### Déterminer un seuil à partir duquel le banquier sera susceptible d'appeler le client pour qu'il fasse un dépôt.")
 
+    if st.checkbox('Afficher les données sur predict_proba'):
     
         # Fonction de Labelisation
         def to_labels(pos_probs, threshold):
@@ -283,6 +256,8 @@ if page == 'Vue métier' :
         cm_prob_xgb
         
         # f1 score XGBClassifier
+        st.write("f1 score XGBClassifier :",np.round(f1_score(y_test_01, y_preds_xbgc),decimals = 3))
+        # f1 score XGBClassifier
       #  st.write("f1 score XGBClassifier :")
       #  f1_score_pred = f1_score(y_test_01, y_preds_xbgc)
       #  f1_score_pred
@@ -314,7 +289,6 @@ if page == 'Vue métier' :
         job_student = 0
         job_unemployed = 0
         job_unknown = 0
-
         
         job = st.selectbox('Secteur de travail', ['management','blue_collar','technician','admin'])
         
@@ -349,12 +323,10 @@ if page == 'Vue métier' :
             marital_divorced = 1
             marital_married = 0
             marital_single = 0
-
         if marital == 'married':
             marital_divorced = 0
             marital_married = 1
             marital_single = 0
-
         if marital == 'single':
             marital_divorced = 0
             marital_married = 0
@@ -389,7 +361,6 @@ if page == 'Vue métier' :
         contact_cellular = 1
         contact_telephone = 0
         contact_unknown = 0
-
         poutcome_failure = 0
         poutcome_other = 0
         poutcome_success = 0    
@@ -407,20 +378,23 @@ if page == 'Vue métier' :
         # Redimensionnement de X pour pouvoir l'utiliser dans le modèle
         X = np.array(X).reshape((1,-1))
         
-        # Affichage de X
+        # Affichage de X avant normalisation
+        st.write("X avant normalisation")
         st.write(X)
         
-         
-        
-        # Normalisation de X ???
-        
-        
+        # Normalisation de X
+        X = pd.DataFrame(scaler_0.transform(X)) 
+        # Affichage de X après normalisation
+        st.write("X après normalisation")
+        st.write(X)        
         
         #Chargement du modèle
         xgbcl = load('xgbcl.joblib')
         
+        # Réponse du modèle 
         y_application = xgbcl.predict(X)
         
+        st.write("### Faut il appeler le client ?")
         y_application
         
 # Liste des variables 
@@ -435,5 +409,3 @@ if page == 'Vue métier' :
   #     'contact_cellular', 'contact_telephone', 'contact_unknown',
   #     'poutcome_failure', 'poutcome_other', 'poutcome_success',
   #     'poutcome_unknown'
-
-print(X)
