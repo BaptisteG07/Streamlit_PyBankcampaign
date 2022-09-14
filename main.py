@@ -82,6 +82,11 @@ page = st.sidebar.radio("Menu",pages_names)
 
 ## Navigation entre les pages 
 
+
+
+
+
+
 if page == 'Présentation du projet' :
 
     # Insertion des titres
@@ -98,7 +103,11 @@ if page == 'Présentation du projet' :
         st.image('image_streamlit_2.jpg', width=400)
     with col3:
         st.write('')
-    
+
+
+
+
+
     # Introduction
     
     st.write(" L’analyse des données marketing est une problématique très classique en sciences des données appliquées dans les entreprises de service.")
@@ -246,7 +255,7 @@ if page == 'Modélisation' :
     
     
     # Matrice de confusion
-    cm = pd.crosstab(y_test, y_pred_xgbcl, rownames=['Classe réelle'], colnames=['Classe prédite'])
+    # cm = pd.crosstab(y_test, y_pred_xgbcl, rownames=['Classe réelle'], colnames=['Classe prédite'])
     
     # Rapport de classification
     rapport_class = classification_report(y_test, y_pred_xgbcl)
@@ -262,11 +271,12 @@ if page == 'Modélisation' :
         info = st.radio('Matrice de confusion et rapport de classification',liste)
         
         if info == 'Matrice de confusion' :
-            cm
+            st.image('Mat_conf_XGBC.png')
         
         if info == 'Rapport de classification':
-            st.text('Model Report:\n ' + rapport_class)
-            st.write("Nous obtenons ici un modèle avec un f1_score de 0.63 ce qui est peu mais au vue de la pauvreté de notre dataframe c'est ce que nous obtenons de mieux.")
+            st.text('Model Report:')
+            st.image('Rap_class_XBGC.png')
+            st.write("Nous obtenons ici un modèle avec un f1_score de 0.65 ce qui est peu mais au vue de la pauvreté de notre dataframe c'est ce que nous obtenons de mieux.")
 
 
 
@@ -299,9 +309,9 @@ if page == 'Vue métier' :
         def to_labels(pos_probs, threshold):
             return (pos_probs >= threshold).astype('int')
         
-        if st.checkbox('Afficher la fonction de labelisation'):
-            st.write("def to_labels(pos_probs, threshold):")
-            st.write("return (pos_probs >= threshold).astype('int')")
+        #if st.checkbox('Afficher la fonction de labelisation'):
+        #    st.write("def to_labels(pos_probs, threshold):")
+        #    st.write("return (pos_probs >= threshold).astype('int')")
        
         # Prédiction des probabilités
         prob_reg_xbgc_train = xgbcl.predict_proba(X_train)
@@ -326,12 +336,12 @@ if page == 'Vue métier' :
         ix = np.argmax(scores)
         st.markdown("<h4/> Meilleur seuil de prédiction</h4>", unsafe_allow_html=True)
         # thresholds[ix]
-        st.write(0.41)
+        st.write(0.36) # Valeur prise dans le colab envoyé aux examinateurs
 
         # F1_score
         st.markdown("<h4/> F1-Score</h4>", unsafe_allow_html=True)
         #scores[ix]
-        st.write(0.82)
+        st.write(0.691) # Valeur prise dans le colab envoyé aux examinateurs
         thresh_max_xgbc = thresholds[ix]
         
         prob_reg_xbgc = xgbcl.predict_proba(X_test)
@@ -341,15 +351,11 @@ if page == 'Vue métier' :
 
         # Matrice de confusion avec seuil XGBC 
         st.markdown("<h4/> Matrice de confusion avec seuil de probabilité</h4>", unsafe_allow_html=True)
-        cm_prob_xgb = pd.crosstab(y_test_01, y_preds_xbgc, rownames=['Classe réelle'], colnames=['Classe prédite'])
-        cm_prob_xgb
+        st.image('Mat_conf.png')
+        #cm_prob_xgb = pd.crosstab(y_test_01, y_preds_xbgc, rownames=['Classe réelle'], colnames=['Classe prédite'])
+        #cm_prob_xgb
         
 
-        # f1 score XGBClassifier
-
-        # st.write("f1 score XGBClassifier :",np.round(f1_score(y_test_01, y_preds_xbgc),decimals = 3))
-
-        
         # f1 score XGBClassifier
       #  st.write("f1 score XGBClassifier :")
       #  f1_score_pred = f1_score(y_test_01, y_preds_xbgc)
@@ -359,7 +365,9 @@ if page == 'Vue métier' :
         
         rapport_class_prob = classification_report(y_test_01, y_preds_xbgc)
         st.markdown("<h4/> Rapport de classification avec seuil</h4>", unsafe_allow_html=True)
-        st.text(rapport_class_prob)
+        st.image('Rap_class_XBGC_proba.png')
+        # st.text(rapport_class_prob)
+
 
         
     if st.checkbox("Application dirècte"):
@@ -378,41 +386,64 @@ if page == 'Vue métier' :
         
         job_entrepreneur = 0
         job_housemaid = 0
-        job_retired = 0
         job_self_employed = 0
         job_services = 0
-        job_student = 0
         job_unemployed = 0
         job_unknown = 0
 
         
-        job = st.selectbox('Secteur de travail', ['management','blue_collar','technician','admin'])
+        job = st.selectbox('Secteur de travail', ['management','blue_collar','technician','admin','retired','student'])
         
         if job == 'admin' :
             job_admin = 1
             job_blue_collar = 0
             job_management = 0
             job_technician = 0
+            job_retired = 0
+            job_student = 0
         
         if job == 'technician' :
             job_admin = 0
             job_blue_collar = 0
             job_management = 0
             job_technician = 1
+            job_retired = 0
+            job_student = 0            
             
         if job == 'blue_collar' :
             job_admin = 0
             job_blue_collar = 1
             job_management = 0
             job_technician = 0       
-            
+            job_retired = 0
+            job_student = 0
+
         if job == 'management' :
             job_admin = 0
             job_blue_collar = 0
             job_management = 1
-            job_technician = 0           
-            
-        
+            job_technician = 0
+            job_retired = 0
+            job_student = 0
+
+        if job == 'retired' :
+            job_admin = 0
+            job_blue_collar = 0
+            job_management = 0
+            job_technician = 0
+            job_retired = 1
+            job_student = 0
+
+        if job == 'student' :
+            job_admin = 0
+            job_blue_collar = 0
+            job_management = 0
+            job_technician = 0
+            job_retired = 0
+            job_student = 1
+
+
+
         marital = st.selectbox('Situation matrimoniale',['married','single','divorced'])
         
         if marital == 'divorced':
