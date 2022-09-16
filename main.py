@@ -41,6 +41,34 @@ df = pd.read_csv(('C:/Users/asus/Documents/Datascientest/Projet_file_rouge/bank.
 # Preprocessing
 
 
+
+
+
+#############################################
+
+# Importation des données de colab
+#X_train = load('X_train_colab.joblib')
+#X_test = load('X_test_colab.joblib')
+#y_train = load('y_train_colab.joblib')
+#y_test = load('y_test_colab.joblib')
+
+# Modèle colab
+#xgbcl = load('xgbcl_colab.joblib')
+
+
+# Modèle
+#xgbcl = XGBClassifier()
+#xgbcl.fit(X_train, y_train)
+
+# Prédiction colab
+#y_pred_xgbcl = xgbcl.predict(X_test)
+
+#############################################
+
+
+
+################################################################################################
+
 # Supression des variables 'default','duration','day','month' de notre jeu de données
 df0 = df.drop(['default','duration','day','month'], axis = 1)
 
@@ -72,7 +100,7 @@ dump(xgbcl, 'xgbcl.joblib')
 # Prédiction
 y_pred_xgbcl = xgbcl.predict(X_test)
 
-
+####################################################################################################
 
 ## Création de la sidebar
 
@@ -138,7 +166,6 @@ if page == 'Exploration et visualisation des données' :
     
     # Insertion des titres
     st.markdown("<h1 style='text-align: center; color : orange'> Exploration et visualisation des données</h1>", unsafe_allow_html=True)
-    # st.write('## Exploration et visualisation des données')
     
     st.write('Comme dans tout projet de data science, la première étape que nous avons réalisée est une analyse rapide des données.')
     st.write("Ainsi nous avons pu nous approprier le jeu de données mis à notre disposition, émettre quelques hypothèses et y associer des graphiques." )        
@@ -148,8 +175,10 @@ if page == 'Exploration et visualisation des données' :
 
     st.markdown("<h3 style='color : skyblue'> Dataset</h3>", unsafe_allow_html=True)
 
-    if st.checkbox('Afficher les données'):
+    if st.checkbox ('Présentation des variables'):
         st.image('variables.png')
+         
+    if st.checkbox('Afficher les données'):
         
         liste_datasets = ['Dataset brut', 'Dataset principal']
         dataset = st.radio('Présentation des deux datasets',liste_datasets)
@@ -157,13 +186,40 @@ if page == 'Exploration et visualisation des données' :
         
         if dataset == 'Dataset brut':
             
-            st.dataframe(df)
+            n=st.select_slider('selection de données',options= range(1,100))
+            st.dataframe(df.head(n))
             
         if dataset == 'Dataset principal':
             
-            df0 = df.drop(['default','duration','day','month'], axis = 1)
-            st.dataframe(df0)
+            st.write("le nouveau dataframe est obtenu apres suppression de default,duration,day et month")
+            n=st.select_slider('selection de données apres suppréssion des variables',options= range(1,100))
+            st.dataframe(df0.head(n))
+
+
+
+
+###################################################################################################
+#    st.markdown("<h3 style='color : skyblue'> Dataset</h3>", unsafe_allow_html=True)
+#
+#    if st.checkbox('Afficher les données'):
+#        st.image('variables.png')
+        
+#        liste_datasets = ['Dataset brut', 'Dataset principal']
+#        dataset = st.radio('Présentation des deux datasets',liste_datasets)
+        
+        
+#        if dataset == 'Dataset brut':
             
+#           st.dataframe(df)
+            
+#        if dataset == 'Dataset principal':
+            
+#            df0 = df.drop(['default','duration','day','month'], axis = 1)
+#            st.dataframe(df0)
+###################################################################################################
+
+
+
     st.markdown("<h3 style='color : skyblue'> Hypothèses</h3>", unsafe_allow_html=True)
         
     # Menu déroulent pour choisir les hypothèses / affichage de l'hypothèse choisi et du graphique
@@ -202,12 +258,14 @@ if page == 'Exploration et visualisation des données' :
         
         st.write("##### Proportion d'étudiant par rapport à deposit")
         fig4_1 = plt.figure()
-        sns.countplot(df.job=='student', hue=df.deposit)
+        #sns.countplot(df.job=='student', hue=df.deposit)
+        sns.countplot(df.job=='student', hue=df.deposit).set_xlabel('Etudiant')
         st.pyplot(fig4_1)
         
         st.write('##### Proportion de retraité par rapport à deposit')
         fig4_2 = plt.figure()
-        sns.countplot(df.job=='retired', hue=df.deposit)
+        #sns.countplot(df.job=='retired', hue=df.deposit)
+        sns.countplot(df.job=='retired', hue=df.deposit).set_xlabel('Retraité')        
         st.pyplot(fig4_2)        
 
 
@@ -248,8 +306,6 @@ if page == 'Exploration et visualisation des données' :
 if page == 'Modélisation' :
     
     st.markdown("<h1 style='text-align: center;color : orange'> Modélisation</h1>", unsafe_allow_html=True)
-
-    # st.write('## Modélisation')
     st.write("##### Nous utiliserons le modèle XGBclassifier car c'est celui avec lequel nous obtenons les meilleurs résultats sur le f1_score et le recall. ")
     
     
@@ -261,22 +317,50 @@ if page == 'Modélisation' :
     rapport_class = classification_report(y_test, y_pred_xgbcl)
     
     
+    
     st.write("### Evaluation")
     st.write("Nous effectuons l'évaluation sur l'ensemble du dataframe en enlevant les variables 'default', 'duration', 'day' et 'month'")
     
     # Ckeckbox avec visualisation de la matrice de confusion et du rapport de classification
     if st.checkbox('Afficher les données'):
+
+        st.markdown("<h4/> Tableau récapitulatif des métriques par rapport aux modèles testés </h4>", unsafe_allow_html=True)
+        st.image('Tableau_metrics.png')
+        st.markdown("<h4/> Importance des variables du XBGC </h4>", unsafe_allow_html=True)
+        st.image('Importance_des_variables.png')
+
         
         liste = ['Matrice de confusion', 'Rapport de classification']
         info = st.radio('Matrice de confusion et rapport de classification',liste)
         
         if info == 'Matrice de confusion' :
             st.image('Mat_conf_XGBC.png')
+
+            #########################################################################################################
+            #cm = pd.crosstab(y_test, y_pred_xgbcl, rownames=['Classe réelle'], colnames=['Classe prédite'])
+            #cm
+            #########################################################################################################
         
         if info == 'Rapport de classification':
             st.text('Model Report:')
             st.image('Rap_class_XBGC.png')
             st.write("Nous obtenons ici un modèle avec un f1_score de 0.65 ce qui est peu mais au vue de la pauvreté de notre dataframe c'est ce que nous obtenons de mieux.")
+            #########################################################################################################
+            #st.text(rapport_class)
+            #########################################################################################################
+
+    st.write("### Interprétation avec SHAP")
+    if st.checkbox('Afficher les interprétations'):
+
+        st.markdown("<h5/> Importance des variables du XBGC selon les valeurs de Shapley </h5>", unsafe_allow_html=True)
+        st.image('Summary_plot_bar_SHAP.png')
+        st.image('Summary_plot_SHAP.png')
+
+        st.markdown("<h5/> Interprétation local </h5>", unsafe_allow_html=True)
+        st.markdown("<h6/> Client défavorable </h6>", unsafe_allow_html=True)
+        st.image('Interprétation_local_no.png')
+        st.markdown("<h6/> Client favorable </h6>", unsafe_allow_html=True)
+        st.image('Interprétation_local_yes.png')
 
 
 
@@ -294,11 +378,10 @@ if page == 'Modélisation' :
 if page == 'Vue métier' :
     
     
-    
     # Présentation de la vue métier avec les probabilités
     st.markdown("<h1 style='text-align: center;color : orange'> Vue métier</h1>", unsafe_allow_html=True)
     st.write("##### Nous avons également voulu proposer l'utilisation d'un outil concret.")
-    st.write("##### Tout ceci dans le but d'avoir une application dirècte de notre projet.")
+    st.write("##### Tout ceci dans le but d'avoir une application directe de notre projet.")
     st.write("##### L'objectif est en premier lieu de trouver un seuil de probabilité pouvant ameliorer les performances de notre modèle, ici le 'recall' et le 'f1_score'")
     st.write("##### Une fois ce seuil obtenu, nous l'utiliserons sur notre modèle finale pour prédire si le banquier doit appeler tel ou tel client pour obtenir une réponse favorable à l'adhésion au contrat à terme.")
     
@@ -525,7 +608,15 @@ if page == 'Vue métier' :
         # Réponse du modèle 
         y_application = xgbcl.predict(X)
 
+        # Affichage de la réponse du modèle
         st.markdown("<h4/> Faut il appeler le client ?</h4>", unsafe_allow_html=True)
         st.write(y_application[0])
 
-        
+        # Affichage de la probabilité associée
+        st.markdown("<h4/> Probabilité associée</h4>", unsafe_allow_html=True)
+        y_prob = xgbcl.predict_proba(X)
+        y_prob_yes =  np.delete(y_prob, 0)
+        st.write(y_prob_yes[0].round(2))
+
+
+
