@@ -30,6 +30,7 @@ from sklearn.metrics import plot_confusion_matrix
 from sklearn.metrics import confusion_matrix
 from joblib import dump, load
 
+
 sns.set_theme()
 
 
@@ -97,15 +98,15 @@ if page == 'Présentation du projet' :
     
     # Introduction
     
-    st.write(" L’analyse des données marketing est une problématique très classique en sciences des données appliquées dans les entreprises de service.")
-    st.write(' Nous disposons d’une base de données, contenant des informations personnelles sur des clients d’une banque qui ont été “télé-marketés”, pour souscrire à un produit que l’on appelle "dépôt à terme".')
-    st.write(" Le principe est le suivant, lorsqu’un client souscrit à ce produit, il place une quantité d’argent dans un compte spécifique et ne pourra pas retirer ces fonds avant l’expiration du terme. En échange, le client reçoit des intérêts de la part de la banque à la fin du contrat.")
+    st.write(" L’analyse des données marketing est une problématique assez classique en sciences de données appliquée dans les entreprises de service.")
+    st.write(' Dans notre projet, nous disposons d’une base de données contenant des informations personnelles sur des clients d’une banque qui ont été “télé-marketés”, pour souscrire à un produit que l’on appelle "dépôt à terme".')
+    st.write(" Le principe est le suivant, lorsqu’un client souscrit à ce produit, il place une somme d’argent dans un compte spécifique et ne pourra pas les retirer avant l’expiration du terme. En échange, le client reçoit des intérêts de la part de la banque à la fin du contrat.")
     
     st.write("<h2 style = 'color : red';> Objectif </h2>", unsafe_allow_html = True)
     
     st.write(" L’objectif de ce projet sera donc de déterminer si un client va adhérer au produit « dépôt à terme », en fonction des résultats obtenus par rapport à la campagne précédente.")
-    st.write(" Nous utiliserons des modèles de Machine Learning ainsi que l’interprétabilité de chacun pour illustrer nos analyses.")
-
+    st.write(" Nous utiliserons des modèles de Machine Learning pour déterminer les paramètres qui permettent aux clients de souscrire ou pas au produit proposé par la banque.")
+    st.write(' Enfin on va illustrer notre analyse avec des graphes pour interpréter le choix des modèles')
     
 if page == 'Exploration et visualisation des données' :
     
@@ -206,37 +207,49 @@ if page == 'Exploration et visualisation des données' :
 if page == 'Modélisation' :
     
     st.write('## Modélisation')
-    st.write("##### Nous utiliserons le modèle XGBclassifier car c'est celui avec lequel nous obtenons les meilleurs résultats sur le f1_score et le recall. ")
+
+    lst_model = ['LogisticRegression','SVM', 'KNN', 'RandomForestClassifier', 'GradientBoostingClassifier', 'XGBClassifier']
+    lst_f1 = [0.63, 0.62, 0.61, 0.63, 0.65, 0.65]
+    lst_recall = [0.58, 0.55, 0.58, 0.60, 0.59, 0.59]
+    lst_acc = [0.67, 0.67, 0.64, 0.66, 0.69, 0.70]
+
+    df_recap_metric = pd.DataFrame(list(zip(lst_model, lst_f1, lst_recall, lst_acc)), 
+                                columns = ['Modèle', 'f1_score (yes)', 'recall_score (yes)', 'Accuracy'])
     
+    df_recap_metric
+
+    st.write("##### Nous utiliserons le modèle XGBclassifier car c'est celui avec lequel nous obtenons les meilleurs résultats sur le f1_score, le recall et l'accuracy. ")
     
     
     # Matrice de confusion
-    cm = pd.crosstab(y_test, y_pred_xgbcl, rownames=['Classe réelle'], colnames=['Classe prédite'])
+    #cm = pd.crosstab(y_test, y_pred_xgbcl, rownames=['Classe réelle'], colnames=['Classe prédite'])
+    
     
     # Rapport de classification
-    rapport_class = classification_report(y_test, y_pred_xgbcl)
-    
+    #rapport_class = classification_report(y_test, y_pred_xgbcl)
+   
     
     st.write("### Evaluation")
     st.write("Nous effectuons l'évaluation sur l'ensemble du dataframe en enlevant les variables 'default', 'duration', 'day' et 'month'")
     
     # Ckeckbox avec visualisation de la matrice de confusion et du rapport de classification
     if st.checkbox('Afficher les données'):
+
+        X_train
         
-        liste = ['Matrice de confusion', 'Rapport de classification']
+        liste = ['Matrice de confusion', 'Rapport de classification','Interpretabilité']
         info = st.radio('Matrice de confusion et rapport de classification',liste)
         
         if info == 'Matrice de confusion' :
-            cm
+            st.image('cm_xgbcl.png')
         
         if info == 'Rapport de classification':
-            st.text('Model Report:\n ' + rapport_class)
-            st.write("Nous obtenons ici un modèle avec un f1_score de 0.63 ce qui est peu mais au vue de la pauvreté de notre dataframe c'est ce que nous obtenons de mieux.")
+            st.image('classification_report_xgbcl.png')
+            st.write("Nous obtenons ici un modèle avec un f1_score de 0.65 ce qui peut s'expliquer en partie par le peu d'informations fournies par notre dataframe pour faire les prédictions.")
 
-
-
-
-
+        if info == 'Interpretabilité':
+            # Importance des valeurs selon XGBClassifier
+            st.image('feature_importance_xgbcl.png')
 
 
 
