@@ -104,22 +104,24 @@ y_pred_xgbcl = xgbcl.predict(X_test)
 
 ## Création de la sidebar
 
-st.sidebar.header('PyBankCampaign')
+st.sidebar.image('logo_datascientest.png')
+st.sidebar.markdown("<h1 style='text-align: center; color : green'> PyBankCampaign</h1>", unsafe_allow_html=True)
 pages_names = ['Présentation du projet', 'Exploration et visualisation des données', 'Modélisation', 'Vue métier']
 page = st.sidebar.radio("Menu",pages_names)
+st.sidebar.markdown("<h1 style='text-align: center; color : green'> Projet réalisé par</h1>", unsafe_allow_html=True)
+st.sidebar.write('')
+st.sidebar.write('BOUNZANGA Joscardin ')
+st.sidebar.write('GUILLARD Baptiste')
+st.sidebar.write('NGOUSSONG Emmanuel')
+
 
 ## Navigation entre les pages 
-
-
-
-
-
 
 if page == 'Présentation du projet' :
 
     # Insertion des titres
     
-    st.markdown("<h1 style='text-align: center;'> Projet PyBankCampaign</h1>", unsafe_allow_html=True)
+    st.markdown("<h1 style='text-align: center; color : orange'> Projet PyBankCampaign</h1>", unsafe_allow_html=True)
     st.write("<h3 style = 'color : skyblue';> Présentation du projet </h3>", unsafe_allow_html = True)
   
     
@@ -305,11 +307,28 @@ if page == 'Exploration et visualisation des données' :
  
 if page == 'Modélisation' :
     
+    
     st.markdown("<h1 style='text-align: center;color : orange'> Modélisation</h1>", unsafe_allow_html=True)
-    st.write("##### Nous utiliserons le modèle XGBclassifier car c'est celui avec lequel nous obtenons les meilleurs résultats sur le f1_score et le recall. ")
+
+    st.markdown("<h3 style='color : skyblue'> Preprocessing</h3>", unsafe_allow_html=True)
+    st.write("Nous effectuons l'évaluation sur l'ensemble du dataframe en enlevant les variables 'default', 'duration', 'day' et 'month'")
+    st.write('##### Features après preprocessing')
+
+    X_train
+
+    st.markdown('<h5> Tableau récapitulatif des métriques par rapport aux modèles </h5>', unsafe_allow_html=True)
+
+    lst_model = ['LogisticRegression','SVM', 'KNN', 'RandomForestClassifier', 'GradientBoostingClassifier', 'XGBClassifier']
+    lst_f1 = [0.63, 0.62, 0.61, 0.63, 0.65, 0.65]
+    lst_recall = [0.58, 0.55, 0.58, 0.60, 0.59, 0.59]
+    lst_acc = [0.67, 0.67, 0.64, 0.66, 0.69, 0.70]
     
+    df_recap_metric = pd.DataFrame(list(zip(lst_model, lst_f1, lst_recall, lst_acc)), columns = ['Modèle', 'f1_score (yes)', 'recall_score (yes)', 'Accuracy'])    
     
-    
+    df_recap_metric
+
+    st.write("Nous utiliserons le modèle XGBclassifier car c'est celui avec lequel nous obtenons les meilleurs résultats sur le f1_score et le recall. ")
+
     # Matrice de confusion
     # cm = pd.crosstab(y_test, y_pred_xgbcl, rownames=['Classe réelle'], colnames=['Classe prédite'])
     
@@ -317,39 +336,27 @@ if page == 'Modélisation' :
     rapport_class = classification_report(y_test, y_pred_xgbcl)
     
     
-    
-    st.write("### Evaluation")
-    st.write("Nous effectuons l'évaluation sur l'ensemble du dataframe en enlevant les variables 'default', 'duration', 'day' et 'month'")
+    st.markdown("<h3 style='color : skyblue'> Evaluation</h3>", unsafe_allow_html=True)
     
     # Ckeckbox avec visualisation de la matrice de confusion et du rapport de classification
-    if st.checkbox('Afficher les données'):
+    if st.checkbox('Afficher les évaluations'):
 
-        st.markdown("<h4/> Tableau récapitulatif des métriques par rapport aux modèles testés </h4>", unsafe_allow_html=True)
-        st.image('Tableau_metrics.png')
-        st.markdown("<h4/> Importance des variables du XBGC </h4>", unsafe_allow_html=True)
-        st.image('Importance_des_variables.png')
-
-        
-        liste = ['Matrice de confusion', 'Rapport de classification']
+        liste = ['Matrice de confusion', 'Rapport de classification','Interpretabilité']
         info = st.radio('Matrice de confusion et rapport de classification',liste)
         
         if info == 'Matrice de confusion' :
-            st.image('Mat_conf_XGBC.png')
-
-            #########################################################################################################
-            #cm = pd.crosstab(y_test, y_pred_xgbcl, rownames=['Classe réelle'], colnames=['Classe prédite'])
-            #cm
-            #########################################################################################################
+            st.image('cm_xgbcl.png')
         
         if info == 'Rapport de classification':
-            st.text('Model Report:')
-            st.image('Rap_class_XBGC.png')
-            st.write("Nous obtenons ici un modèle avec un f1_score de 0.65 ce qui est peu mais au vue de la pauvreté de notre dataframe c'est ce que nous obtenons de mieux.")
-            #########################################################################################################
-            #st.text(rapport_class)
-            #########################################################################################################
+            st.image('classification_report_xgbcl.png')
+            st.write("Nous obtenons ici un modèle avec un f1_score de 0.65 ce qui peut s'expliquer en partie par le peu d'informations fournies par notre dataframe pour faire les prédictions.")
 
-    st.write("### Interprétation avec SHAP")
+        if info == 'Interpretabilité':
+            # Importance des valeurs selon XGBClassifier
+            st.image('feature_importance_xgbcl.png')
+
+
+    st.markdown("<h3 style='color : skyblue'> Interprétation avec SHAP</h3>", unsafe_allow_html=True)
     if st.checkbox('Afficher les interprétations'):
 
         st.markdown("<h5/> Importance des variables du XBGC selon les valeurs de Shapley </h5>", unsafe_allow_html=True)
@@ -380,10 +387,10 @@ if page == 'Vue métier' :
     
     # Présentation de la vue métier avec les probabilités
     st.markdown("<h1 style='text-align: center;color : orange'> Vue métier</h1>", unsafe_allow_html=True)
-    st.write("##### Nous avons également voulu proposer l'utilisation d'un outil concret.")
-    st.write("##### Tout ceci dans le but d'avoir une application directe de notre projet.")
-    st.write("##### L'objectif est en premier lieu de trouver un seuil de probabilité pouvant ameliorer les performances de notre modèle, ici le 'recall' et le 'f1_score'")
-    st.write("##### Une fois ce seuil obtenu, nous l'utiliserons sur notre modèle finale pour prédire si le banquier doit appeler tel ou tel client pour obtenir une réponse favorable à l'adhésion au contrat à terme.")
+    st.write("Nous avons également voulu proposer l'utilisation d'un outil concret.")
+    st.write("Tout ceci dans le but d'avoir une application directe de notre projet.")
+    st.write("L'objectif est en premier lieu de trouver un seuil de probabilité pouvant ameliorer les performances de notre modèle, ici le 'recall' et le 'f1_score'")
+    st.write("Une fois ce seuil obtenu, nous l'utiliserons sur notre modèle finale pour prédire si le banquier doit appeler tel ou tel client pour obtenir une réponse favorable à l'adhésion au contrat à terme.")
     
     if st.checkbox('Afficher les données sur predict_proba'):
 
@@ -611,6 +618,11 @@ if page == 'Vue métier' :
         # Affichage de la réponse du modèle
         st.markdown("<h4/> Faut il appeler le client ?</h4>", unsafe_allow_html=True)
         st.write(y_application[0])
+        if y_application[0] == 'no':
+            st.write('## :-1:')
+
+        if y_application[0] == 'yes':
+            st.write('## :+1:')
 
         # Affichage de la probabilité associée
         st.markdown("<h4/> Probabilité associée</h4>", unsafe_allow_html=True)
