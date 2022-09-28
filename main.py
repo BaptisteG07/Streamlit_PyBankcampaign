@@ -47,10 +47,10 @@ df = pd.read_csv(('C:/Users/asus/Documents/Datascientest/Projet_file_rouge/bank.
 #############################################
 
 # Importation des données de colab
-#X_train = load('X_train_colab.joblib')
-#X_test = load('X_test_colab.joblib')
-#y_train = load('y_train_colab.joblib')
-#y_test = load('y_test_colab.joblib')
+#X_train = load('X_train.to_csv')
+#X_test = load('X_test.to_csv')
+#y_train = load('y_train.to_csv')
+#y_test = load('y_test.to_csv')
 
 # Modèle colab
 #xgbcl = load('xgbcl_colab.joblib')
@@ -188,13 +188,13 @@ if page == 'Exploration et visualisation des données' :
         
         if dataset == 'Dataset brut':
             
-            n=st.select_slider('selection de données',options= range(1,100))
+            n=st.select_slider('Selection de données',options= range(1,100))
             st.dataframe(df.head(n))
             
         if dataset == 'Dataset principal':
             
-            st.write("le nouveau dataframe est obtenu apres suppression de default,duration,day et month")
-            n=st.select_slider('selection de données apres suppréssion des variables',options= range(1,100))
+            st.write("Le nouveau dataframe est obtenu après suppression de default,duration,day et month")
+            n=st.select_slider('Selection de données après suppression des variables',options= range(1,100))
             st.dataframe(df0.head(n))
 
 
@@ -228,7 +228,7 @@ if page == 'Exploration et visualisation des données' :
 
     hypothèses = st.selectbox('Selectionner une hypothèse',('Hypothèse_1', 'Hypothèse_2', 'Hypothèse_3','Hypothèse_4','Hypothèse_5','Hypothèse_6'))
     
-    if hypothèses == 'Hypothèse_1':
+    if hypothèses == 'Hypothèse_3':
         st.write("### Un client a plus de chance de souscrire s'il n'a pas de crédit ?")
         
         st.write('##### Clients ayant un crédit personnel en cours par rapport à deposit')
@@ -246,7 +246,7 @@ if page == 'Exploration et visualisation des données' :
         st.pyplot(fig2)
 
     
-    if hypothèses == 'Hypothèse_3':
+    if hypothèses == 'Hypothèse_1':
         st.write("### Ne pas avoir un défaut de crédit favorise-t-il un dépôt à terme ?")
         
         st.write('##### Clients ayant un défaut de crédit par rapport aux clients ayant fait un dépôt à terme')
@@ -460,7 +460,7 @@ if page == 'Vue métier' :
 
 
         
-    if st.checkbox("Application dirècte"):
+    if st.checkbox("Application direct"):
 
         st.markdown("<h4/> Choix des paramètres</h4>", unsafe_allow_html=True)
         
